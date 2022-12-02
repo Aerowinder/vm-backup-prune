@@ -51,4 +51,4 @@ foreach ($entry in $ht.GetEnumerator()) {
 if (Test-Path $file_log) {Invoke-Item $file_log} #If log file exists, open it up and leave it on screen.
 
 #Changelog
-#2022-12-02 - AS - v1, Updated for Git, refarctored to match new requirements.
+#2022-12-02 - AS - v1, Updated for Git, refactored to match new requirements.
