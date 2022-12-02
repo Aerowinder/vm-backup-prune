@@ -51,10 +51,4 @@ foreach ($entry in $ht.GetEnumerator()) {
 if (Test-Path $file_log) {Invoke-Item $file_log} #If log file exists, open it up and leave it on screen.
 
 #Changelog
-#2022-05-18 - AS - v1, First release. Only for personal use at the moment.
-#2022-05-19 - AS - v2, Optimized code by switching to ordered hashtable.
-#2022-05-19 - AS - v3, Added $logdir check prior to code execution, simplified code by making short-circuit If statements, instead of using If...Then...Else.
-#2022-11-10 - AS - v4, Adapted to VMs (changed ordered list contents).
-#2022-11-18 - AS - v5, Added newest file date check, updated from checking if total file count was greater than the prune number. Fixed Docker remnant in error message.
-#2022-11-30 - AS - v6, Fixed overlooked issue from v5. If backup count didn't exceed $keepbackup, an error would be thrown.
-#2022-12-02 - AS - v7, Updated for Git, refarctored to match new requirements.
+#2022-12-02 - AS - v1, Updated for Git, refarctored to match new requirements.
