@@ -15,28 +15,18 @@ function LogWrite{ # We don't need to verify $dir_log exists, since the script w
     Add-Content $file_log -Value ($time + ':   ' + $message + "`n")
 }
 
-$ht = [ordered]@{} # Key = Mask, Value = Subfolder; hashtable is ordered mostly for log display purposes, technically doesn't matter.
-$ht.Add('technitium1' ,'technitium1*.tar.gz')
-$ht.Add('nginx-int', 'nginx-int*.tar.gz')
-$ht.Add('librenms', 'librenms*.tar.gz')
-$ht.Add('dokuwiki', 'dokuwiki*.tar.gz')
-$ht.Add('unifi', 'unifi*.tar.gz')
-$ht.Add('dashy', 'dashy*.tar.gz')
-$ht.Add('technitium2', 'technitium2*.tar.gz')
-$ht.Add('nginx-ext', 'nginx-ext*.tar.gz')
-$ht.Add('plex', 'plex*.tar.gz')
-$ht.Add('usenet', 'usenet*.tar.gz')
+$list_backup = "technitium1","nginx-int","librenms","dokuwiki","unifi","dashy","technitium2","nginx-ext","plex","usenet"
 
-foreach ($entry in $ht.GetEnumerator()) {
-    $path_backup = $dir_base + '\' + $entry.Name
+foreach ($entry in $list_backup) {
+    $path_backup = $dir_base + '\' + $entry
 
-    if (-Not(Test-Path -Path $path_backup)) {LogWrite ("Error: Path not found. `n            Folder: " + $path_backup + "  |  Mask: " + $entry.Value); continue} #If $path_backup does not exist, write log file and skip to next iteration of loop.
+    if (-Not(Test-Path -Path $path_backup)) {LogWrite ("Error: Path not found. `n            Folder: " + $path_backup); continue} #If $path_backup does not exist, write log file and skip to next iteration of loop.
 
-    $files = Get-ChildItem -Path ($path_backup + '\*') -Include $entry.Value #Grab complete list of files in the subfolder.
+    $files = Get-ChildItem -Path ($path_backup + '\*') -Include ($entry + '*') #Grab complete list of files in the subfolder.
 
     if (-Not $null -eq $files) { #At least one backup exists for this entry.
         $newestfile = $files | Sort-Object -Property Name -Descending | Select-Object -First 1 #Select newest file from the list of files in the subfolder
-        if (Test-Path $newestfile -OlderThan (Get-Date).AddDays(-7)) {LogWrite ("Error: No new backups found. `n            Folder: " + $path_backup + "  |  Mask: " + $entry.Value); continue} #If newest log file is older than 7 days, write log file and skip to next iteration of loop.
+        if (Test-Path $newestfile -OlderThan (Get-Date).AddDays(-7)) {LogWrite ("Error: No new backups found. `n            Folder: " + $path_backup); continue} #If newest log file is older than 7 days, write log file and skip to next iteration of loop.
     }
 
     if ($files.Count -gt $keepbackup) {
@@ -52,3 +42,4 @@ if (Test-Path $file_log) {Invoke-Item $file_log} #If log file exists, open it up
 
 #Changelog
 #2022-12-02 - AS - v1, Updated for Git, refactored to match new requirements.
+#2022-12-03 - AS - v2, Removed hash table. Submitted v1 to code-dump. Removed Mask text from logs.
