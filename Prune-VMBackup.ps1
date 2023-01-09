@@ -15,7 +15,7 @@ function LogWrite{ # We don't need to verify $dir_log exists, since the script w
     Add-Content $file_log -Value ($time + ':   ' + $message + "`n")
 }
 
-$list_backup = "technitium1","nginx-int","librenms","dokuwiki","unifi","dashy","technitium2","nginx-ext","plex","usenet"
+$list_backup = "technitium1","nginx-int","librenms","dokuwiki","dashy","technitium2","nginx-ext","plex","usenet"
 
 foreach ($entry in $list_backup) {
     $path_backup = $dir_base + '\' + $entry
@@ -43,3 +43,4 @@ if (Test-Path $file_log) {Invoke-Item $file_log} #If log file exists, open it up
 #Changelog
 #2022-12-02 - AS - v1, Updated for Git, refactored to match new requirements.
 #2022-12-03 - AS - v2, Removed hash table. Submitted v1 to code-dump. Removed Mask text from logs.
+#2023-01-09 - AS - v3, Removed unifi from backup list.
